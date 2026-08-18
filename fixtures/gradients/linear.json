@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "0.1.0",
+  "source": {
+    "app": "google-slides",
+    "presentationId": "slides2figma-test-suite",
+    "slideId": "slide-03",
+    "title": "Slide 03 — Gradients"
+  },
+  "canvas": { "width": 1920, "height": 1080, "unit": "source" },
+  "nodes": [
+    {
+      "id": "rect-gradient-2stop",
+      "name": "2-stop linear",
+      "visible": true,
+      "zIndex": 0,
+      "transform": { "x": 80, "y": 80, "width": 600, "height": 300, "rotation": 0 },
+      "opacity": 1,
+      "type": "rectangle",
+      "fill": [
+        {
+          "type": "linear-gradient",
+          "stops": [
+            { "position": 0, "color": { "r": 1, "g": 0, "b": 0, "a": 1 } },
+            { "position": 1, "color": { "r": 0, "g": 0, "b": 1, "a": 1 } }
+          ],
+          "start": { "x": 0, "y": 0.5 },
+          "end": { "x": 1, "y": 0.5 }
+        }
+      ]
+    },
+    {
+      "id": "rect-gradient-4stop-diagonal",
+      "name": "4-stop diagonal linear, transparent stop, opacity, stroke",
+      "visible": true,
+      "zIndex": 1,
+      "transform": { "x": 80, "y": 440, "width": 600, "height": 300, "rotation": 0 },
+      "opacity": 0.85,
+      "type": "rectangle",
+      "fill": [
+        {
+          "type": "linear-gradient",
+          "stops": [
+            { "position": 0, "color": { "r": 1, "g": 0.9, "b": 0.2, "a": 1 } },
+            { "position": 0.33, "color": { "r": 0.9, "g": 0.2, "b": 0.6, "a": 0 } },
+            { "position": 0.66, "color": { "r": 0.2, "g": 0.6, "b": 0.9, "a": 1 } },
+            { "position": 1, "color": { "r": 0.1, "g": 0.1, "b": 0.1, "a": 1 } }
+          ],
+          "start": { "x": 0, "y": 0 },
+          "end": { "x": 1, "y": 1 },
+          "rotation": 45
+        }
+      ],
+      "strokes": [
+        { "color": { "r": 0, "g": 0, "b": 0, "a": 1 }, "width": 4 }
+      ]
+    }
+  ],
+  "assets": [],
+  "diagnostics": []
+}

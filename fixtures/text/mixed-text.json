@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "0.1.0",
+  "source": {
+    "app": "google-slides",
+    "presentationId": "slides2figma-test-suite",
+    "slideId": "slide-04",
+    "title": "Slide 04 — Text"
+  },
+  "canvas": { "width": 1920, "height": 1080, "unit": "source" },
+  "nodes": [
+    {
+      "id": "text-mixed-1",
+      "name": "Mixed styling text",
+      "visible": true,
+      "zIndex": 0,
+      "transform": { "x": 160, "y": 400, "width": 800, "height": 220, "rotation": 0 },
+      "opacity": 1,
+      "type": "text",
+      "text": "Slides2Figma renders text faithfully.\nA centered second line with wider spacing.",
+      "box": { "width": 800, "height": 220 },
+      "runs": [
+        {
+          "start": 0,
+          "end": 12,
+          "fontFamily": "Arial",
+          "fontSize": 32,
+          "fontWeight": 700,
+          "bold": true,
+          "fill": { "type": "solid", "color": { "r": 0, "g": 0, "b": 0, "a": 1 } }
+        },
+        {
+          "start": 13,
+          "end": 20,
+          "fontFamily": "Georgia",
+          "fontSize": 24,
+          "fontWeight": 400,
+          "italic": true,
+          "letterSpacing": 2,
+          "fill": { "type": "solid", "color": { "r": 0.8, "g": 0.1, "b": 0.1, "a": 1 } }
+        },
+        {
+          "start": 21,
+          "end": 25,
+          "fontFamily": "Arial",
+          "fontSize": 18,
+          "fill": { "type": "solid", "color": { "r": 0, "g": 0, "b": 0, "a": 1 } }
+        },
+        {
+          "start": 26,
+          "end": 37,
+          "fontFamily": "Arial",
+          "fontSize": 20,
+          "fontWeight": 700,
+          "bold": true,
+          "italic": true,
+          "fill": { "type": "solid", "color": { "r": 0.1, "g": 0.2, "b": 0.9, "a": 1 } }
+        },
+        {
+          "start": 38,
+          "end": 80,
+          "fontFamily": "Arial",
+          "fontSize": 18,
+          "fill": { "type": "solid", "color": { "r": 0.2, "g": 0.2, "b": 0.2, "a": 1 } }
+        }
+      ],
+      "paragraphs": [
+        {
+          "start": 0,
+          "end": 37,
+          "align": "left",
+          "lineHeight": 1.2
+        },
+        {
+          "start": 38,
+          "end": 80,
+          "align": "center",
+          "lineHeight": 1.8,
+          "spaceBefore": 12
+        }
+      ]
+    }
+  ],
+  "assets": [],
+  "diagnostics": []
+}

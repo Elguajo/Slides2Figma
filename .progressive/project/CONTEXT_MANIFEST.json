@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "default": {
+    "required": [],
+    "skills": [],
+    "notes": [
+      "Every extraction source must normalize into packages/scene-schema before touching Figma — never call Figma APIs directly from source-specific code (Technical Spec §4, §72).",
+      "Slides_to_Figma_Technical_Spec_v0.1.md is source evidence for detail already summarized into PROJECT_BRIEF.md/ARCHITECTURE.md; do not re-copy it wholesale into phase files, only cite the relevant section numbers."
+    ]
+  },
+  "phases": {
+    "00": {
+      "required": ["Slides_to_Figma_Technical_Spec_v0.1.md"],
+      "skills": ["implementation-execution"],
+      "notes": [
+        "Relevant spec sections: §10-24 (Scene/Node/Fill/Gradient/Text/Vector/Image models), §34-37 (plugin structure, manifest, render pipeline, root Frame metadata), §16-17 (font resolution + text render order), §50 (fixture slides to mirror).",
+        "Renderer-first sequencing is a deliberate resolution of a spec self-contradiction (§63 labels extraction research 'Phase 0' but §70's commit order builds schema+renderer first) — see Phase 00 Context, flagged for user confirmation."
+      ]
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "0.1.0",
+  "source": {
+    "app": "google-slides",
+    "presentationId": "slides2figma-test-suite",
+    "slideId": "slide-12",
+    "title": "Slide 12 — Unsupported"
+  },
+  "canvas": { "width": 1920, "height": 1080, "unit": "source" },
+  "nodes": [
+    {
+      "id": "rect-valid-1",
+      "name": "Surviving sibling shape",
+      "visible": true,
+      "zIndex": 0,
+      "transform": { "x": 120, "y": 120, "width": 400, "height": 240, "rotation": 0 },
+      "opacity": 1,
+      "type": "rectangle",
+      "fill": [
+        { "type": "solid", "color": { "r": 0.3, "g": 0.7, "b": 0.4, "a": 1 } }
+      ]
+    },
+    {
+      "id": "unsupported-chart-1",
+      "name": "Quarterly revenue chart",
+      "visible": true,
+      "zIndex": 1,
+      "transform": { "x": 600, "y": 120, "width": 500, "height": 320, "rotation": 0 },
+      "opacity": 1,
+      "type": "unsupported",
+      "sourceType": "chart",
+      "reason": "Charts are not yet supported (Phase 00); imported as a placeholder.",
+      "fallback": { "type": "svg", "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"500\" height=\"320\"><rect width=\"500\" height=\"320\" fill=\"#eeeeee\"/></svg>" }
+    }
+  ],
+  "assets": [],
+  "diagnostics": [
+    {
+      "severity": "warning",
+      "nodeId": "unsupported-chart-1",
+      "code": "unsupported-node-type",
+      "message": "Chart converted to placeholder; original chart data is not editable.",
+      "details": { "sourceType": "chart" }
+    }
+  ]
+}

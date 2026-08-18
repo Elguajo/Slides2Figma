@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "0.1.0",
+  "source": {
+    "app": "google-slides",
+    "presentationId": "slides2figma-test-suite",
+    "slideId": "slide-01",
+    "title": "Slide 01 — Basic shapes"
+  },
+  "canvas": { "width": 1920, "height": 1080, "unit": "source" },
+  "nodes": [
+    {
+      "id": "rect-plain-1",
+      "name": "Rectangle",
+      "visible": true,
+      "zIndex": 0,
+      "transform": { "x": 120, "y": 160, "width": 480, "height": 280, "rotation": 0 },
+      "opacity": 1,
+      "type": "rectangle",
+      "fill": [
+        { "type": "solid", "color": { "r": 0.2, "g": 0.45, "b": 0.9, "a": 1 } }
+      ],
+      "strokes": [
+        { "color": { "r": 0.05, "g": 0.15, "b": 0.35, "a": 1 }, "width": 2 }
+      ]
+    },
+    {
+      "id": "rect-rounded-1",
+      "name": "Rounded Rectangle",
+      "visible": true,
+      "zIndex": 1,
+      "transform": { "x": 700, "y": 220, "width": 420, "height": 240, "rotation": 12 },
+      "opacity": 0.9,
+      "type": "rectangle",
+      "cornerRadius": 32,
+      "fill": [
+        { "type": "solid", "color": { "r": 0.9, "g": 0.35, "b": 0.2, "a": 1 } }
+      ]
+    }
+  ],
+  "assets": [],
+  "diagnostics": []
+}

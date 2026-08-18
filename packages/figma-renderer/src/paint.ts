@@ -1,10 +1,11 @@
 import type { Diagnostic, Fill, Stroke } from '@slides2figma/scene-schema';
+import { buildGradientPaint } from './gradient-renderer';
 
 /**
- * Solid fills only for now -- linear/radial gradient conversion is Task 7
- * (gradient-renderer). Non-solid fills are surfaced as a `warning`
- * Diagnostic and skipped rather than approximated, so the gap is visible
- * instead of silently faked.
+ * Solid, linear-gradient, and radial-gradient fills are supported (Fill's
+ * schema scope for Phase 00 -- see fill.ts). Angular/diamond gradients and
+ * image fills aren't representable by the current schema, so there's no
+ * fallback branch for them here.
  */
 export function buildFillPaints(
   fills: Fill[] | undefined,
@@ -22,13 +23,7 @@ export function buildFillPaints(
         opacity: fill.color.a,
       });
     } else {
-      diagnostics.push({
-        severity: 'warning',
-        nodeId,
-        sourceId,
-        code: 'gradient-fill-not-implemented',
-        message: `"${fill.type}" fill is not implemented yet (rectangle/ellipse render only supports solid fills) -- skipped on node "${nodeId}".`,
-      });
+      paints.push(buildGradientPaint(fill));
     }
   }
 

@@ -1,5 +1,6 @@
 import { SceneSchema } from '@slides2figma/scene-schema';
 import { renderScene } from '@slides2figma/figma-renderer';
+import { pluginFontResolver } from '../fonts/resolver';
 
 interface RenderFixtureMessage {
   type: 'render-fixture';
@@ -8,7 +9,7 @@ interface RenderFixtureMessage {
 
 figma.showUI(__html__, { width: 320, height: 380 });
 
-figma.ui.onmessage = (message: RenderFixtureMessage) => {
+figma.ui.onmessage = async (message: RenderFixtureMessage) => {
   if (!message || message.type !== 'render-fixture') {
     return;
   }
@@ -23,7 +24,7 @@ figma.ui.onmessage = (message: RenderFixtureMessage) => {
     return;
   }
 
-  const { diagnostics } = renderScene(parsed.data);
+  const { diagnostics } = await renderScene(parsed.data, pluginFontResolver);
 
   figma.notify(
     diagnostics.length > 0 ? `Rendered with ${diagnostics.length} diagnostic(s)` : 'Rendered',

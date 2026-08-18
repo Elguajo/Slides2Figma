@@ -1,5 +1,6 @@
 import type { Diagnostic, Scene, SceneNode } from '@slides2figma/scene-schema';
 import { renderEllipse, renderRectangle } from './shape-renderer';
+import { renderText, type FontResolver } from './text-renderer';
 
 export interface RenderResult {
   frame: FrameNode;
@@ -9,11 +10,13 @@ export interface RenderResult {
 /**
  * Validate -> create root Frame -> sort by zIndex -> per-node-type render ->
  * metadata -> select pipeline (Technical Spec §36-37). Dispatch below covers
- * rectangle/ellipse (Task 5); text/gradient/vector/image/group extend the
- * same switch in later Phase 00 tasks rather than replacing it -- anything
- * not yet handled falls through to an `info` Diagnostic instead of a node.
+ * rectangle/ellipse (Task 5) and text (Task 6); gradient/vector/image/group
+ * extend the same switch in later Phase 00 tasks rather than replacing it --
+ * anything not yet handled falls through to an `info` Diagnostic instead of
+ * a node. Async because text rendering must `loadFontAsync` before it can
+ * touch `characters`/range styling (Technical Spec §16-17).
  */
-export function renderScene(scene: Scene): RenderResult {
+export async function renderScene(scene: Scene, fontResolver: FontResolver): Promise<RenderResult> {
   const frame = figma.createFrame();
   frame.name = rootFrameName(scene);
   frame.resize(scene.canvas.width, scene.canvas.height);
@@ -22,7 +25,7 @@ export function renderScene(scene: Scene): RenderResult {
   const diagnostics: Diagnostic[] = [...scene.diagnostics];
 
   for (const node of sortedNodes) {
-    diagnostics.push(...renderNode(frame, node));
+    diagnostics.push(...(await renderNode(frame, node, fontResolver)));
   }
 
   frame.setPluginData(
@@ -42,7 +45,7 @@ export function renderScene(scene: Scene): RenderResult {
   return { frame, diagnostics };
 }
 
-function renderNode(frame: FrameNode, node: SceneNode): Diagnostic[] {
+async function renderNode(frame: FrameNode, node: SceneNode, fontResolver: FontResolver): Promise<Diagnostic[]> {
   switch (node.type) {
     case 'rectangle': {
       const { figmaNode, diagnostics } = renderRectangle(node);
@@ -51,6 +54,11 @@ function renderNode(frame: FrameNode, node: SceneNode): Diagnostic[] {
     }
     case 'ellipse': {
       const { figmaNode, diagnostics } = renderEllipse(node);
+      frame.appendChild(figmaNode);
+      return diagnostics;
+    }
+    case 'text': {
+      const { figmaNode, diagnostics } = await renderText(node, fontResolver);
       frame.appendChild(figmaNode);
       return diagnostics;
     }

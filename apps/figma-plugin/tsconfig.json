@@ -2,9 +2,9 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist/plugin",
-    "rootDir": "src/plugin",
+    "rootDir": "src",
     "noEmit": true,
     "types": ["@figma/plugin-typings"]
   },
-  "include": ["src/plugin"]
+  "include": ["src/plugin", "src/fonts"]
 }

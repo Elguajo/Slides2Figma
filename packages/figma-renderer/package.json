@@ -11,5 +11,11 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@slides2figma/scene-schema": "workspace:*"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.134.0"
   }
 }

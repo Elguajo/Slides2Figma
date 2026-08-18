@@ -1,0 +1,11 @@
+{
+  "name": "Slides2Figma",
+  "id": "slides2figma-dev-local",
+  "api": "1.0.0",
+  "main": "dist/plugin/main.js",
+  "ui": "dist/ui/index.html",
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": ["none"]
+  }
+}

@@ -41,8 +41,8 @@ Non-negotiable architectural rule for this and every later phase (Technical Spec
 - [x] Init pnpm workspace monorepo (root `package.json`, `pnpm-workspace.yaml`, base `tsconfig`, `apps/`, `packages/`, `fixtures/` directories, Vitest config)
 - [x] `packages/scene-schema`: types + Zod schema + unit tests
 - [x] Author `fixtures/basic/rectangle.json`, `fixtures/text/mixed-text.json`, `fixtures/gradients/linear.json`, and one unsupported-node fixture
-- [ ] `apps/figma-plugin` shell (manifest, `main.ts`, minimal fixture-loading UI, dev build script)
-- [ ] `packages/figma-renderer`: rectangle + ellipse render
+- [x] `apps/figma-plugin` shell (manifest, `main.ts`, minimal fixture-loading UI, dev build script)
+- [x] `packages/figma-renderer`: rectangle + ellipse render
 - [ ] `packages/figma-renderer`: text render (font resolver, per-run styling, paragraph styling)
 - [ ] `packages/figma-renderer`: linear + radial gradient render
 - [ ] `packages/figma-renderer`: basic vector render
@@ -50,7 +50,7 @@ Non-negotiable architectural rule for this and every later phase (Technical Spec
 - [ ] Group/z-order handling + diagnostics reporter + per-child error isolation
 
 ## Acceptance criteria
-- [ ] Loading `fixtures/basic/rectangle.json` in the Figma plugin produces a native `RectangleNode` with correct position/size/rotation/opacity/fill.
+- [x] Loading `fixtures/basic/rectangle.json` in the Figma plugin produces a native `RectangleNode` with correct position/size/rotation/opacity/fill.
 - [ ] Loading `fixtures/text/mixed-text.json` produces one editable Figma `TextNode` with correct per-range font/size/weight/color, and the text can be edited by hand after import.
 - [ ] Loading `fixtures/gradients/linear.json` produces a native `GRADIENT_LINEAR` paint with all stops and correct direction, editable in Figma's fill panel.
 - [ ] The unsupported-node fixture still produces a Frame with its other children intact plus a `warning` Diagnostic — no aborted import, no whole-slide rasterization.

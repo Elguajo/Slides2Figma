@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Slides2Figma — Extraction Research",
+  "version": "0.0.0",
+  "description": "Dev-only research tool: Clipboard Inspector and extraction probes for Google Slides Web (Phase 01).",
+  "permissions": ["storage", "scripting", "clipboardRead", "clipboardWrite"],
+  "host_permissions": ["https://docs.google.com/presentation/*"],
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://docs.google.com/presentation/*"],
+      "js": ["content/bridge.js", "content/ui.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://docs.google.com/presentation/*"],
+      "js": ["injected/main-world.js"],
+      "world": "MAIN",
+      "run_at": "document_idle"
+    }
+  ]
+}

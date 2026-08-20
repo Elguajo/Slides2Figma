@@ -23,10 +23,25 @@ const sharedOptions = {
   logLevel: 'info',
 };
 
+/**
+ * Figma's web plugin sandbox (unlike desktop, and unlike the UI iframe) runs
+ * plugin code in a restricted realm with no working `BigInt` global. zod's
+ * core module unconditionally evaluates `BigInt(...)` at import time to
+ * build its int64/uint64 range table (`BIGINT_FORMAT_RANGES`), even though
+ * this codebase never uses `z.bigint()`/int64 schemas -- that throws
+ * "BigInt is not a function" before the plugin can even call
+ * `figma.showUI`. Shimming a non-throwing (imprecise) `BigInt` is safe here
+ * specifically because no schema in this repo relies on real bigint
+ * precision; scoped to the plugin bundle only via banner (runs before any
+ * bundled code, including zod's) since the UI iframe has a real `BigInt`.
+ */
+const bigIntShimBanner = `if (typeof globalThis.BigInt !== 'function') { globalThis.BigInt = function (v) { return Number(v); }; }`;
+
 const pluginOptions = {
   ...sharedOptions,
   entryPoints: [join(appDir, 'src/plugin/main.ts')],
   outfile: join(appDir, 'dist/plugin/main.js'),
+  banner: { js: bigIntShimBanner },
 };
 
 const uiOptions = {

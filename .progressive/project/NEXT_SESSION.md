@@ -2,62 +2,63 @@
 
 > Volatile hot context. Overwrite this file on each meaningful handoff. Durable completed-phase history belongs in `.progressive/completions/` (Runtime: `.progressive/completions/`) with only a compact bridge in the completed phase `Completion Record`.
 
-Outcome: IN PROGRESS
+Outcome: PHASE 01 COMPLETE
 
 ## Current phase
-Phase 00 — Monorepo, Scene Schema & Fixture-Driven Figma Renderer — `.progressive/phases/00-scene-schema-renderer.md` (in progress — Tasks 1–7 done)
+Phase 01 — Google Slides Extraction Research — `.progressive/phases/01-extraction-research.md` (now `[x]` COMPLETE). Next phase: Phase 02 — Basic Google Slides Extraction — `.progressive/phases/02-basic-extraction.md` (not yet created; still `[ ]` PLANNED in `ROADMAP.md`).
 
 ## Completed this session
-- Upgraded the Progressive Context Kit runtime 1.7.1 → 1.8.0 (framework files only; see git log) and renamed `docs/` → `spec/` to clear a reserved-namespace collision with `audit.py`.
-- Completed Phase 00 Task 7: `packages/figma-renderer` — linear + radial gradient render.
-  - Added `packages/figma-renderer/src/gradient-renderer.ts` (`buildGradientPaint`), wired into `paint.ts`'s `buildFillPaints`, which now dispatches `linear-gradient`/`radial-gradient` fills there instead of emitting the old `gradient-fill-not-implemented` warning. Both shape and text fills go through this automatically (no changes needed in `shape-renderer.ts`/`text-renderer.ts`).
-  - Core of the implementation is `handlesToTransform`: a closed-form solution for Figma's `gradientTransform` (2×3 affine matrix) derived by solving `A · identityHandle = targetHandle` for Figma's three fixed identity handles `(0,0.5)`, `(1,0.5)`, `(0,1)`. Verified by hand and by test that it round-trips to the identity matrix `[[1,0,0],[0,1,0]]` when handles equal the identity points.
-  - `linearHandles`: handle0/1 = `start`/`end` (rotated around their midpoint by `rotation` if present); handle2 (width control, doesn't affect `GRADIENT_LINEAR`'s visible output) = a perpendicular offset of half the axis length, matching Figma's own identity geometry.
-  - `radialHandles`: handle0 = `center`; handle1/2 = `center + radiusX`/`radiusY` offsets, rotated around `center` by `rotation` if present.
-  - Added `packages/figma-renderer/src/gradient-renderer.test.ts` (7 tests) covering the identity case, stop passthrough, a non-identity axis, rotation composition, and radial scaling/rotation — all pure-function, no Figma sandbox needed.
-
-## Verification evidence
-- `pnpm --filter @slides2figma/figma-renderer build` (tsc) → no errors.
-- `pnpm --filter @slides2figma/figma-plugin typecheck` (both tsconfigs) → no errors.
-- `pnpm -w test` → 16 test files, 66 tests passed (was 59; +7 new gradient tests), no regressions.
-- `node apps/figma-plugin/scripts/build.mjs` → `dist/plugin/main.js` (605.1KB) and `dist/ui/index.html` rebuilt with no errors.
-- `python3 .progressive/tools/audit.py --root .` → FAIL, 5 errors, all pre-existing/accepted (Roadmap phase files 01–05 intentionally not yet authored per `ROADMAP.md`'s own note — not a regression).
-- **Not done, deferred by user decision**: manual load-and-inspect of `fixtures/text/mixed-text.json` (Task 6) and `fixtures/gradients/linear.json` (Task 7) in the real Figma desktop app. I have no way to drive Figma desktop directly, so this can only be done by the user. Both acceptance-criteria checkboxes stay unchecked in the phase file to reflect this; the Task-list checkboxes are checked since both implementations are complete and pass all evidence obtainable without the live sandbox.
+- Closed Phase 01's last open blocker: retried multi-select and whole-slide (`Cmd+A`) capture via direct manual interaction (click/shift-click + real `Cmd+C` + the extension's `Capture Copy`) against the same "Your big idea" deck, driven live in the user's real Chrome via Claude-in-Chrome.
+- Both captured cleanly: multi-select (title text + book-cover image, shift-clicked) and whole-slide (`Cmd+A`, 3 objects) both decode into `drawings-object+wrapped`'s `resolved` array as independent sibling entries — same mechanism already established for groups. Confirms Hypothesis A holds for these categories too.
+- **Root-caused last session's "browser-automation instability"**: it wasn't automation flakiness. The Clipboard Inspector's `Capture Copy` reads whatever is *currently on the OS clipboard* rather than triggering a copy itself. Selecting elements then clicking `Capture Copy` without an intervening real `Cmd+C` silently captures a stale/unrelated clipboard entry (repro'd: it grabbed a leftover `text/link-preview` page-URL payload) with no error shown. Correct sequence: select → real `Cmd+C` (focus still on canvas) → then `Capture Copy`. Flagged as a UX fix worth making in the Inspector before Phase 02 relies on it routinely.
+- Asked the user how to close the remaining §5.1/§50 category gaps (rounded rectangle standalone, ellipse, triangle, real arrow/star/cloud/chevron/callout/wave, true gradients, chart, WordArt — none present in the ad-hoc deck). User chose to **accept the ad-hoc deck's coverage as final** rather than build the formal `SLIDES2FIGMA TEST SUITE` or source another deck.
+- Updated `docs/extraction-findings.md` (rows 16–17 flipped to Captured/Holds, new detailed write-up, revised Hypothesis A verdict and recommended next steps), `.progressive/phases/01-extraction-research.md` (Task 6 → `[x]`, Completion Record populated), and `ROADMAP.md` (Phase 01 → `[x]`).
+- An earlier attempt this session to build the formal test suite via a Google Apps Script (`SlidesApp` automation) was abandoned mid-run at the user's explicit direction in favor of working directly with the existing "Your big idea" deck. No repo files were affected by that abandoned attempt; it only touched the user's Google Drive (a new "SLIDES2FIGMA TEST SUITE" Slides file and a "Slides2Figma chart data" Sheet may exist in their Drive in an incomplete state — not cleaned up, not blocking, flagged here for awareness).
 
 ## Blockers / uncertainty
-- **Not a blocker, just deferred**: manual Figma-desktop verification for Task 6 (text) and Task 7 (gradients) — user explicitly decided not to gate further implementation on this. Do it in one batched pass later, ideally once more fixtures exist (vector, image) so it's a single Figma-desktop session instead of one per task.
-  - Steps: import `apps/figma-plugin/manifest.json` into a scratch Figma file, "Use developer VM" OFF (see below), load each fixture, render, check: text — one `TextNode`, per-run font/size/weight/color/italic/letter-spacing match, editable by hand; gradients — native `GRADIENT_LINEAR` paint, correct stops/direction/opacity, editable in the fill panel for both rectangles in `fixtures/gradients/linear.json` (including the rotated 4-stop one — see Important decisions below on the rotation assumption).
-- Figma desktop's "Use developer VM" setting (`Plugins → Development → Use developer VM`) must stay OFF for this plugin during local development (`BigInt is not a function` otherwise). Local dev-environment setting, not a code bug.
-- Tooling profile still not selected/bootstrapped (`TOOLING_STATUS.json` is still `not_selected`) — deferred, not required to keep making Phase 00 progress.
+- None blocking Phase 02. The deferred category gaps (rounded rectangle standalone, ellipse, triangle, real arrow/star/cloud/chevron/callout/wave, true gradients, chart, WordArt) are documented as open questions in `docs/extraction-findings.md` and Phase 01's Completion Record — revisit if/when Phase 02/03 work actually needs one of them, not before.
+- Image crop properties (`79`/`80`/`84`/`85` in `drawings-object+wrapped`) are present and consistent but their exact mapping to a crop rectangle is still undecoded — noted as a Phase 02/03 follow-up, not a Phase 01 blocker.
+- Tooling profile still not selected/bootstrapped (`TOOLING_STATUS.json` still `not_selected`) — deferred, not blocking.
+- Leftover Google Drive artifacts from the abandoned Apps Script attempt (see above) — harmless, but the user may want to delete them; not touched autonomously since they're outside the repo.
 
 ## Important decisions
-- **Gradient `rotation` field semantics are an assumption, not a confirmed spec reading.** Technical Spec §13 declares `rotation?: number` on both `LinearGradientFill` and `RadialGradientFill` but doesn't say how it composes with `start`/`end` (linear) or is otherwise disambiguated. Implemented as: rotate the `start`→`end` axis around its own midpoint by `rotation` degrees (linear), and rotate the `radiusX`/`radiusY` axes around `center` by `rotation` degrees (radial) — i.e. `rotation` always layers on top of the base geometry rather than replacing it. `fixtures/gradients/linear.json`'s second rectangle (`start:(0,0)`, `end:(1,1)`, `rotation:45`) will render as a **vertical** gradient under this reading (45° diagonal + 45° rotation = 90° from horizontal), not a diagonal one — this is exactly the kind of thing the deferred manual Figma check should confirm looks intentional, since a real extractor's actual angle-composition convention (Phase 02+) may turn out to differ.
-- `gradientTransform`'s third ("width") handle is mathematically irrelevant to `GRADIENT_LINEAR`'s rendered output (verified against Figma's own identity-handle geometry, not just assumed) — implemented as a well-defined non-degenerate perpendicular offset rather than an arbitrary/degenerate one, so it stays valid if Figma's gradient editor is later used to hand-adjust the same paint.
-- No changes were needed in `shape-renderer.ts`/`text-renderer.ts`: both already call `buildFillPaints`, which now transparently returns real `GRADIENT_LINEAR`/`GRADIENT_RADIAL` paints instead of the old warning-and-skip branch — gradient support "fell out" of the existing fill pipeline for free.
+- User explicitly declined to build the formal `SLIDES2FIGMA TEST SUITE` (§50) and accepted the ad-hoc "Your big idea" deck's coverage (12 of 17 §5.1 categories, with real evidence) as sufficient to close Phase 01. Reopen this only if the user raises it again or Phase 02/03 hits a concrete need for one of the untested shape types.
+- Property `15`/`19` (fill/stroke) in `drawings-object+wrapped` should be trusted for vector shapes and table cells but **ignored** for picture-type objects in Phase 02's parser — see `docs/extraction-findings.md`'s cross-cutting finding.
+- Phase 02's parser should prefer `document-slice-clip+wrapped`'s named-key encoding over `drawings-object+wrapped`'s numeric opcodes wherever both exist, falling back to `drawings-object+wrapped` only for geometry/shape-type/image-blob references it alone carries.
 
 ## Next action
-Continue to Phase 00 Task 8: `packages/figma-renderer` — basic vector render. No `fixtures/vector/*.json` fixture exists yet — author one (a simple multi-point path, per Technical Spec vector-model sections) alongside the renderer, matching the pattern already used for rectangle/text/gradient fixtures. Scope per phase file "Out of scope": complex multi-path vector geometry is deferred to Phase 03 — keep this to a single closed/open path with straight and/or basic curve segments. Keep `pnpm -w test` green.
+1. Route to Phase 02 (Basic Google Slides Extraction — text/shapes/images/position/z-order → real `Scene`, per §65–§68). Per Phase 01's findings, start with **text and tables** (cleanest, most reliable captures) before images/crops (fill-color caveat, undecoded crop math).
+2. Create `.progressive/phases/02-basic-extraction.md` when Phase 02 becomes `[>]` IN PROGRESS in `ROADMAP.md` (not created yet — phases only get a detailed file once active, per this repo's routing convention).
+3. Build the real `clipboard/parser.ts` (currently a stub) using this phase's findings: `drawings-object+wrapped` for geometry/shape-type/image-blob, `document-slice-clip+wrapped` preferred for table/paragraph/run styling where both exist.
 
 ## NEXT SESSION PROMPT
 ```text
-Continue Phase 00 Task 8: packages/figma-renderer -- basic vector render.
-No fixtures/vector/*.json fixture exists yet -- author one (a simple
-multi-point path; see the Technical Spec's vector/VectorSceneNode model
-sections) alongside a new vector-renderer.ts, matching the module pattern
-of shape-renderer.ts/text-renderer.ts/gradient-renderer.ts. Complex
-multi-path vector geometry is out of scope until Phase 03 -- keep this to
-a single closed/open path with straight and/or basic curve segments.
-Keep pnpm -w test green; run the same typecheck/build verification as
-prior tasks.
+Start Phase 02 -- Basic Google Slides Extraction
+(text/shapes/images/position/z-order -> real Scene), per ROADMAP.md and
+Technical Spec Sec65-Sec68. Phase 01 (extraction research) is now [x]
+COMPLETE -- read its Completion Record in
+.progressive/phases/01-extraction-research.md and docs/extraction-findings.md
+before writing any parser code; do not reread the full findings doc's raw
+evidence tables unless a specific decision needs them.
 
-Manual Figma-desktop verification for Task 6 (text) and Task 7 (gradients)
-is still deferred (not blocking) -- see NEXT_SESSION.md Blockers. Consider
-batching it with Task 8/9's manual checks into one Figma-desktop session
-once vector + image fixtures both exist.
+Phase 02 doesn't have a phase file yet -- create
+.progressive/phases/02-basic-extraction.md when this phase becomes [>] in
+ROADMAP.md, following the pattern of Phase 00/01's phase files (Goal,
+Context, Context hints, In/Out of scope, Tasks, Acceptance criteria,
+Negative/security cases, Verification, Completion Record).
 
-Per .progressive/phases/00-scene-schema-renderer.md acceptance criteria.
+Key findings from Phase 01 to build on:
+- drawings-object+wrapped: shape geometry (transform matrix, shapeTypeCode),
+  image blob references, and every selected object as a flat sibling list
+  (groups/multi-select/whole-slide all use the same structure).
+- document-slice-clip+wrapped: friendlier named-key encoding, prefer it for
+  table/paragraph/run-level styling when both formats carry the same data.
+- Property 15/19 (fill/stroke) is real for vector shapes/tables but must be
+  ignored for picture-type objects (shapeTypeCode 3 + a 49 blob reference).
+- clipboard/parser.ts is currently a stub -- this is the phase to make it real.
 
-Read the active instruction layers, recover project state from the Default Read Set,
-verify the Roadmap marker, and continue the next action autonomously. Do not reread
-full completed phases, completion reports, or chat history unless evidence requires it.
+Read the active instruction layers, recover project state from the Default
+Read Set, verify the Roadmap marker, and continue the next action
+autonomously. Do not reread full completed phases, completion reports, or
+chat history unless evidence requires it.
 ```

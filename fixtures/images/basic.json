@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "0.1.0",
+  "source": {
+    "app": "google-slides",
+    "presentationId": "slides2figma-test-suite",
+    "slideId": "slide-09",
+    "title": "Slide 09 — Photo"
+  },
+  "canvas": { "width": 1920, "height": 1080, "unit": "source" },
+  "nodes": [
+    {
+      "id": "image-photo",
+      "name": "Photo (full-bleed, no crop)",
+      "visible": true,
+      "zIndex": 0,
+      "transform": { "x": 120, "y": 120, "width": 400, "height": 300, "rotation": 0 },
+      "opacity": 1,
+      "type": "image",
+      "assetId": "asset-red-pixel"
+    },
+    {
+      "id": "image-photo-rotated",
+      "name": "Photo (rotated, reduced opacity)",
+      "visible": true,
+      "zIndex": 1,
+      "transform": { "x": 600, "y": 160, "width": 260, "height": 260, "rotation": 12 },
+      "opacity": 0.8,
+      "type": "image",
+      "assetId": "asset-red-pixel"
+    }
+  ],
+  "assets": [
+    {
+      "id": "asset-red-pixel",
+      "mimeType": "image/png",
+      "bytes": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
+      "width": 1,
+      "height": 1
+    }
+  ],
+  "diagnostics": []
+}

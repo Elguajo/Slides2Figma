@@ -3,8 +3,12 @@ import type {
   EllipseNode as SceneEllipseNode,
   RectangleNode as SceneRectangleNode,
   Transform2D,
+  VectorSceneNode as SceneVectorNode,
 } from '@slides2figma/scene-schema';
 import { buildFillPaints, buildStrokePaints, strokeCapMap, strokeJoinMap } from './paint';
+
+type ShapeLikeNode = RectangleNode | EllipseNode | VectorNode;
+type ShapeLikeSceneNode = SceneRectangleNode | SceneEllipseNode | SceneVectorNode;
 
 export interface ShapeRenderResult<T> {
   figmaNode: T;
@@ -28,13 +32,10 @@ export function renderEllipse(node: SceneEllipseNode): ShapeRenderResult<Ellipse
 
 /**
  * Shared transform/opacity/fill/stroke application for the "default shape"
- * node kinds (rectangle, ellipse). Later shape-like renderers (vector) can
- * reuse this once they land in Task 8.
+ * node kinds (rectangle, ellipse, vector -- Task 8 reuses this for vectors
+ * per this function's original intent rather than duplicating it).
  */
-function applyShapeCommon(
-  figmaNode: RectangleNode | EllipseNode,
-  node: SceneRectangleNode | SceneEllipseNode,
-): Diagnostic[] {
+export function applyShapeCommon(figmaNode: ShapeLikeNode, node: ShapeLikeSceneNode): Diagnostic[] {
   figmaNode.name = node.name ?? node.id;
   applyTransform(figmaNode, node.transform);
   figmaNode.opacity = node.opacity;
@@ -45,6 +46,19 @@ function applyShapeCommon(
   applyStrokes(figmaNode, node.strokes);
 
   return diagnostics;
+}
+
+/**
+ * Structural rather than `ShapeLikeNode` so `image-renderer.ts` (a bare
+ * `RectangleNode`, already covered) and `group-renderer.ts` (a `FrameNode`)
+ * can both reuse this without widening `ShapeLikeNode` itself, which also
+ * drives `applyShapeCommon`'s fill/stroke logic that doesn't apply to frames.
+ */
+interface TransformableNode {
+  resize(width: number, height: number): void;
+  x: number;
+  y: number;
+  rotation: number;
 }
 
 /**
@@ -60,14 +74,14 @@ function applyShapeCommon(
  * rotated by `transform.rotation` about (x, y), confirming the underlying
  * node position is correct.
  */
-function applyTransform(figmaNode: RectangleNode | EllipseNode, transform: Transform2D): void {
+export function applyTransform(figmaNode: TransformableNode, transform: Transform2D): void {
   figmaNode.resize(transform.width, transform.height);
   figmaNode.x = transform.x;
   figmaNode.y = transform.y;
   figmaNode.rotation = transform.rotation;
 }
 
-function applyStrokes(figmaNode: RectangleNode | EllipseNode, strokes: SceneRectangleNode['strokes']): void {
+function applyStrokes(figmaNode: ShapeLikeNode, strokes: SceneRectangleNode['strokes']): void {
   figmaNode.strokes = buildStrokePaints(strokes);
 
   const [primary] = strokes ?? [];

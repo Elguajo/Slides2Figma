@@ -45,15 +45,15 @@ Non-negotiable architectural rule for this and every later phase (Technical Spec
 - [x] `packages/figma-renderer`: rectangle + ellipse render
 - [x] `packages/figma-renderer`: text render (font resolver, per-run styling, paragraph styling)
 - [x] `packages/figma-renderer`: linear + radial gradient render
-- [ ] `packages/figma-renderer`: basic vector render
-- [ ] `packages/figma-renderer`: image render (no crop yet)
-- [ ] Group/z-order handling + diagnostics reporter + per-child error isolation
+- [x] `packages/figma-renderer`: basic vector render
+- [x] `packages/figma-renderer`: image render (no crop yet)
+- [x] Group/z-order handling + diagnostics reporter + per-child error isolation
 
 ## Acceptance criteria
 - [x] Loading `fixtures/basic/rectangle.json` in the Figma plugin produces a native `RectangleNode` with correct position/size/rotation/opacity/fill.
-- [ ] Loading `fixtures/text/mixed-text.json` produces one editable Figma `TextNode` with correct per-range font/size/weight/color, and the text can be edited by hand after import.
-- [ ] Loading `fixtures/gradients/linear.json` produces a native `GRADIENT_LINEAR` paint with all stops and correct direction, editable in Figma's fill panel.
-- [ ] The unsupported-node fixture still produces a Frame with its other children intact plus a `warning` Diagnostic — no aborted import, no whole-slide rasterization.
+- [x] Loading `fixtures/text/mixed-text.json` produces one editable Figma `TextNode` with correct per-range font/size/weight/color, and the text can be edited by hand after import. Manually verified in Figma desktop 2026-08-18.
+- [x] Loading `fixtures/gradients/linear.json` produces a native `GRADIENT_LINEAR` paint with all stops and correct direction, editable in Figma's fill panel. Manually verified in Figma desktop 2026-08-18.
+- [x] The unsupported-node fixture still produces a Frame with its other children intact plus a `warning` Diagnostic — no aborted import, no whole-slide rasterization.
 - [x] `pnpm -w test` runs scene-schema validation tests and passes.
 
 ## Negative / security cases
@@ -65,4 +65,7 @@ Non-negotiable architectural rule for this and every later phase (Technical Spec
 - `.progressive/system/QUALITY_PROTOCOL.md` validation order applies once implementation starts (targeted tests → type check → lint → build → manual/runtime check).
 
 ## Completion Record
-<populate only when this phase becomes [x]>
+
+Status: COMPLETED (2026-08-18)
+
+All 10 tasks and all acceptance criteria checked above. Every fixture (`basic/rectangle`, `text/mixed-text`, `gradients/linear`, `vector/basic-path`, `images/basic`, `groups/basic`, `errors/unsupported-node`) has been manually loaded and verified in Figma desktop via the dev plugin, in addition to `pnpm -w test` passing (16 test files, 69 tests). Full delivered-capability summary, decisions, and follow-up live in the compact bridge: `.progressive/completions/00-scene-schema-renderer.md`.

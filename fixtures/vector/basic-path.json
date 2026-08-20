@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "0.1.0",
+  "source": {
+    "app": "google-slides",
+    "presentationId": "slides2figma-test-suite",
+    "slideId": "slide-08",
+    "title": "Slide 08 — Advanced shapes"
+  },
+  "canvas": { "width": 1920, "height": 1080, "unit": "source" },
+  "nodes": [
+    {
+      "id": "vector-chevron",
+      "name": "Chevron (straight segments, closed)",
+      "visible": true,
+      "zIndex": 0,
+      "transform": { "x": 120, "y": 120, "width": 300, "height": 200, "rotation": 0 },
+      "opacity": 1,
+      "type": "vector",
+      "pathData": "M 0 0 L 180 0 L 300 100 L 180 200 L 0 200 L 120 100 Z",
+      "fill": [
+        { "type": "solid", "color": { "r": 0.2, "g": 0.7, "b": 0.3, "a": 1 } }
+      ]
+    },
+    {
+      "id": "vector-curved-pennant",
+      "name": "Curved pennant (straight + curve segments, closed)",
+      "visible": true,
+      "zIndex": 1,
+      "transform": { "x": 120, "y": 400, "width": 300, "height": 160, "rotation": -8 },
+      "opacity": 0.9,
+      "type": "vector",
+      "pathData": "M 0 10 L 220 10 C 260 10 260 150 220 150 L 0 150 Z",
+      "fill": [
+        { "type": "solid", "color": { "r": 1, "g": 0.5, "b": 0, "a": 1 } }
+      ],
+      "strokes": [
+        { "color": { "r": 0, "g": 0, "b": 0, "a": 1 }, "width": 3 }
+      ]
+    }
+  ],
+  "assets": [],
+  "diagnostics": []
+}

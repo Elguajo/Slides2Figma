@@ -2,8 +2,8 @@
 
 Legend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`
 
-- [>] Phase 00 — Monorepo, Scene Schema & Fixture-Driven Figma Renderer — `.progressive/phases/00-scene-schema-renderer.md`
-- [ ] Phase 01 — Google Slides Extraction Research (Clipboard / Web-UI / MAIN-world) — `.progressive/phases/01-extraction-research.md`
+- [x] Phase 00 — Monorepo, Scene Schema & Fixture-Driven Figma Renderer — `.progressive/phases/00-scene-schema-renderer.md`
+- [x] Phase 01 — Google Slides Extraction Research (Clipboard / Web-UI / MAIN-world) — `.progressive/phases/01-extraction-research.md`
 - [ ] Phase 02 — Basic Google Slides Extraction (text/shapes/images/position/z-order → real Scene) — `.progressive/phases/02-basic-extraction.md`
 - [ ] Phase 03 — High Fidelity (gradients, complex vectors, image crop, nested transforms, mixed text, effects) — `.progressive/phases/03-high-fidelity.md`
 - [ ] Phase 04 — Transport (local relay → pairing → production relay/WebSocket) — `.progressive/phases/04-transport.md`
